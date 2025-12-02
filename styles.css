@@ -1,124 +1,102 @@
-:root{
-  --bg-1: #BFE7FF; /* baby blue */
-  --bg-2: #FFD6E0; /* pastel pink */
-  --bg-3: #D8B9FF; /* pastel purple */
-  --accent: #FF6B8A; /* dynamic accent (controlled by JS) */
-  --text: #222;
-  --glass: rgba(255,255,255,0.6);
-  --shadow: 0 10px 30px rgba(0,0,0,0.12);
-  --stage-padding: 20px;
+/* -------------------------------------------------------------------------- */
+/* CSS Color Variables and Base Styling                                      */
+/* -------------------------------------------------------------------------- */
+
+:root {
+    /* Base Pastel Palette */
+    --color-pastel-pink: #FFD6E0;
+    --color-pastel-blue: #BFE7FF;
+    --color-pastel-lavender: #D8B9FF;
+    --color-cream-bg: #FFF7EE;
+    
+    /* Dynamic Mood Colors (Default: Blue/Numbness) */
+    --color-bg-dark: #0b1d3d; /* Base scene color */
+    --color-light: #ADD8E6;  /* Light glow color */
+    --color-mid: #4682B4;    /* Mid glow color */
+    --color-accent: #8A2BE2; /* Accent color for purple/red */
+    
+    /* Animation Control */
+    --heart-speed: 20s;
 }
 
-/* Reset-ish */
-*{box-sizing:border-box}
-html,body,#app{height:100%}
-body{
-  margin:0;
-  font-family: 'Comfortaa', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  transition:background 600ms linear;
-  overflow:hidden;
+body {
+    font-family: 'Noto Sans', sans-serif;
+    color: white;
+    background-color: black;
+    transition: background-color 2s ease-in-out;
 }
 
-/* Overlay start card */
-.overlay{
-  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg, rgba(10,10,20,0.55), rgba(30,10,50,0.35));
-  z-index:50;
-}
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
-  padding:28px;border-radius:18px;box-shadow:var(--shadow);
-  text-align:center;min-width:260px;
-}
-.title{
-  font-family: 'Pacifico', cursive;
-  font-size:28px;margin:0 0 6px;
-  color: #5b2755;
-}
-.subtitle{margin:0 0 16px;color:#6b6b6b}
-.hint{font-size:12px;color:#8a8a8a;margin-top:8px}
-
-/* Buttons */
-.btn{
-  background:var(--accent);color:white;border:0;padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:600;
-}
-.btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(0,0,0,0.06)}
-.btn.big{padding:12px 22px;font-size:16px;border-radius:14px}
-.icon{background:transparent;border:0;padding:6px 8px;border-radius:10px;cursor:pointer;}
-
-/* Scene layout */
-.scene{position:fixed;inset:0;display:flex;flex-direction:column}
-.hud{display:flex;justify-content:space-between;padding:12px 20px;align-items:center}
-.controls{display:flex;gap:10px;align-items:center}
-.visualizer-wrap{width:220px;height:60px;display:flex;align-items:center;justify-content:center}
-.visualizer-wrap canvas{width:100%;height:100%;border-radius:10px;background:rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.03)}
-
-/* Main bedroom */
-.main{flex:1;display:flex;align-items:center;justify-content:center;padding:var(--stage-padding)}
-.bedroom{
-  position:relative;width:min(980px,96%);height:min(560px,78vh);border-radius:20px;overflow:hidden;
-  background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
-  box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;
-  transform:translateZ(0);
+/* Custom Background for the memory log to match the pastel feel */
+.bg-cream-bg {
+    background-color: var(--color-cream-bg);
 }
 
-/* Soft vignette and thumb light using CSS variables set by JS */
-.bedroom::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;
-  background:radial-gradient(circle at var(--light-x,50%) var(--light-y,50%), rgba(255,255,255,0.55) 0%, transparent 18%), linear-gradient(180deg, rgba(0,0,40,0.04), rgba(0,0,0,0.02));
-  mix-blend-mode:screen;pointer-events:none;
+/* -------------------------------------------------------------------------- */
+/* Scene and Animation Styles                                                */
+/* -------------------------------------------------------------------------- */
+
+#scene-background {
+    background-color: var(--color-bg-dark);
+    /* Subtle Grain/Vignette Effect */
+    box-shadow: 
+        inset 0 0 100px rgba(0, 0, 0, 0.9), /* Dark inner vignette */
+        inset 0 0 100px var(--color-light); /* Soft light halo */
 }
 
-/* Lollipop / bubble */
-.lollipop{
-  position:absolute;left:18%;bottom:18%;width:72px;height:120px;display:flex;align-items:flex-end;justify-content:center;
-  cursor:pointer;user-select:none;touch-action:none;
-}
-.lollipop .stick{
-  position:absolute;bottom:12px;width:6px;height:60px;background:#fff;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,0.08);
-  transform:translateY(6px);
-}
-.bubble{
-  width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ffd1e0,#ffe8f7);box-shadow:0 6px 20px rgba(0,0,0,0.16);
-  transform-origin:center center;transition:transform 120ms linear, filter 120ms linear;
-  display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;
+/* The Thumb Light Glow */
+#thumb-light {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, var(--color-light) 0%, transparent 70%);
+    box-shadow: 0 0 50px var(--color-light);
 }
 
-/* Hearts layer */
-.hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-
-/* meter */
-.meter{position:absolute;right:6%;bottom:6%;width:140px;height:16px;background:rgba(255,255,255,0.25);border-radius:12px;padding:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.2)}
-.meter-bar{height:100%;width:0%;border-radius:9px;background:linear-gradient(90deg, rgba(255,0,120,0.9), rgba(128,0,255,0.9));transition:width 300ms linear}
-
-/* pillow (note trigger) */
-.pillow{position:absolute;right:14%;bottom:22%;background:var(--glass);border-radius:12px;padding:8px 10px;border:0;cursor:pointer;box-shadow:var(--shadow)}
-
-/* modal */
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(10,10,10,0.3), rgba(10,10,30,0.2));z-index:60}
-.modal.hidden{display:none}
-.modal-card{background:white;padding:18px;border-radius:12px;min-width:320px;box-shadow:var(--shadow)}
-.modal-card h2{margin:0 0 8px;font-family:'Pacifico',cursive;color:#5b2755}
-textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #eee;resize:vertical}
-
-/* Polaroid preview style (if you want to include inline preview later) */
-.polaroid{
-  background:white;padding:14px;border-radius:6px;box-shadow:var(--shadow)
+/* The Kiss Meter Bar Fill */
+#kiss-bar {
+    background-color: var(--color-accent) !important;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  *{transition:none!important;animation:none!important}
+/* Heart Particle Styling */
+.heart-particle {
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--color-pastel-pink); /* Default heart color */
+    animation: heartFloat var(--heart-speed) linear infinite, heartPulse 3s ease-in-out infinite alternate;
+    opacity: 0;
+    transform: translateY(100vh);
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(255, 192, 203, 0.8);
+    transition: color 1s;
 }
 
-/* Responsive */
-@media (max-width:700px){
-  .bedroom{height:68vh}
-  .lollipop{left:12%;bottom:12%}
-  .meter{right:6%;bottom:6%}
-  .visualizer-wrap{display:none}
+/* Heart Floating Animation */
+@keyframes heartFloat {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    25% { opacity: 0.8; }
+    50% { transform: translateY(50vh) translateX(5vw); opacity: 0.8; }
+    75% { transform: translateY(20vh) translateX(-5vw); opacity: 0.5; }
+    100% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+}
+
+/* Subtle Heart Pulsing */
+@keyframes heartPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+/* Bubble Inflation Styling */
+#bubble-svg {
+    background-color: rgba(255, 192, 203, 0.7); /* Pink Bubblegum */
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+}
+
+/* Purple Bloom Finale Animation */
+@keyframes purpleBloom {
+    0% { filter: hue-rotate(0deg) brightness(1); }
+    50% { filter: hue-rotate(90deg) brightness(1.5); }
+    100% { filter: hue-rotate(0deg) brightness(1); }
+}
+
+.scene-bloom {
+    animation: purpleBloom 1.5s ease-in-out;
 }
