@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Daydream — For Her</title>
+
+  <!-- Link CSS -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Fonts: change if you like -->
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;600&family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!--
+    Folder structure:
+    - index.html
+    - styles.css
+    - script.js
+    - assets/song.mp3        (optional, your chosen audio file)
+    - assets/pop.wav        (optional pop SFX)
+    - assets/inflate.wav    (optional inflate SFX)
+  -->
+
+  <div id="app" class="app">
+    <!-- Start overlay to satisfy autoplay policies -->
+    <div id="startOverlay" class="overlay">
+      <div class="card">
+        <h1 class="title">Enter my daydream</h1>
+        <p class="subtitle">Tap to start — made with ❤️</p>
+        <button id="startBtn" class="btn big">Start</button>
+        <p class="hint">Best experienced with sound. Mobile: tap once to allow audio.</p>
+      </div>
+    </div>
+
+    <!-- Main scene -->
+    <div id="scene" class="scene" aria-hidden="true">
+      <!-- header controls -->
+      <header class="hud">
+        <div class="controls">
+          <button id="playPause" class="icon" aria-label="Play/Pause">▶</button>
+          <input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" title="Volume">
+        </div>
+        <div class="visualizer-wrap" title="Music visualizer">
+          <canvas id="visualizer" width="200" height="60"></canvas>
+        </div>
+      </header>
+
+      <!-- bedroom background + interactive items -->
+      <main class="main">
+        <div class="bedroom">
+          <img class="bed-illustration" src="" alt="" aria-hidden="true">
+          <!-- thumb light: implemented as CSS radial at :root var --light-x/y -->
+          <div id="heartLayer" class="hearts" aria-hidden="true"></div>
+
+          <!-- lollipop / blow bubble control -->
+          <div id="lollipop" class="lollipop" role="button" tabindex="0" aria-label="Hold to blow bubble">
+            <div class="stick"></div>
+            <div id="bubble" class="bubble" aria-hidden="true"></div>
+          </div>
+
+          <!-- kiss meter / mood bar -->
+          <div class="meter">
+            <div class="meter-bar" id="meterBar" aria-hidden="true"></div>
+          </div>
+
+          <!-- polaroid note trigger -->
+          <button id="pillow" class="pillow" aria-label="Open note">✷</button>
+        </div>
+      </main>
+
+      <!-- polaroid modal -->
+      <div id="polaroidModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-card">
+          <h2>Polaroid note</h2>
+          <textarea id="noteText" rows="4">My daydream with you — always purple. 💜</textarea>
+          <div class="modal-actions">
+            <button id="downloadPolaroid" class="btn">Download</button>
+            <button id="closeModal" class="btn ghost">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden audio element (optional file) -->
+    <audio id="track" src="assets/song.mp3" crossorigin="anonymous"></audio>
+  </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
